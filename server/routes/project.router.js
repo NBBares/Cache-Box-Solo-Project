@@ -108,4 +108,34 @@ const router = express.Router();
             res.sendStatus(500);
           });
       });
+
+    //PUT
+    router.put('/edit/:id', (req, res) => {
+        const updatedProject = req.body;
+
+        console.log("REQ.BODY FOR EDIT,", req.body);
+      
+            const queryImage = `UPDATE "images"
+            SET "image_name" = $1, 
+            "image_description" = $2  
+            WHERE id=$3;`;
+          
+            const queryImageValues = [
+              updatedProject.image_name,
+              updatedProject.image_description,
+              req.params.id
+            ];
+          
+                pool.query(queryImage, queryImageValues)
+                    .then(() => { res.sendStatus(200); })
+                    .catch((err) => {
+                    console.log('Error completing SELECT Image query', err);
+                res.sendStatus(500);
+              })
+            .catch((err) => {
+            console.log('Error completing SELECT Project query', err);
+            res.sendStatus(500);
+          });
+      });
+
 module.exports = router;
