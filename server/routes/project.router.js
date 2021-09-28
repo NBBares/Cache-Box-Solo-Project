@@ -82,7 +82,7 @@ const router = express.Router();
   })
 
   //DELETE PROJECT
-  router.delete('/:id', (req, res) => {
+  router.delete('/project/:id', (req, res) => {
     //grab the project id
     const queryText = 'DELETE FROM "projects" WHERE id=$1';
     pool.query(queryText, [req.params.id])
@@ -94,4 +94,18 @@ const router = express.Router();
         res.sendStatus(500);
       });
   });
+
+    //DELETE PROJECT
+    router.delete('/images/:id', (req, res) => {
+        //grab the project id
+        const queryText = 'DELETE FROM "images" WHERE id=$1';
+        pool.query(queryText, [req.params.id])
+          .then(() => { res.sendStatus(200); })
+          //success
+          .catch((err) => {
+            console.log('Error completing SELECT Project query', err);
+            //catch for delete
+            res.sendStatus(500);
+          });
+      });
 module.exports = router;
