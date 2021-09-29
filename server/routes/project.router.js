@@ -3,7 +3,7 @@ const pool = require('../modules/pool');
 const router = express.Router();
 
 /**
- * GET route template
+ * GET PROJECT
  */
 router.get('/project', (req, res) => {
     const query = ` SELECT "projects"."id", "projects"."title", "projects"."project_description", "projects"."entry_date", "projects"."edit_date", "projects"."type_id", "projects"."user_id", "types"."type_name", "user"."id", jsonb_agg("tags") as "tags" ,jsonb_agg("images") as "images" FROM "projects" 
@@ -30,56 +30,58 @@ router.get('/project', (req, res) => {
     }
 });
 
+//GET TAGS
+router.get('/tags', (req, res) => {
+
+    const query = `SELECT * FROM "tags"
+    WHERE "tags"."user_id" = $1;`
+    console.log('req.user:', req.user.id);
+    if (req.isAuthenticated()) {
+        pool.query(query, [req.user.id])
+            .then(result => {
+                res.send(result.rows);
+            })
+            .catch(err => {
+                console.log('ERROR: Get all tags', err);
+                res.sendStatus(500)
+            })
+    } else {
+        res.sendStatus(403);
+    }
+});
+
 /**
- * POST route template
+ * POST PROJECT
  */
-router.post('/post', (req, res) => {
+router.post('/post', async (req, res) => {
     console.log(req.body);
     // RETURNING "id" will return project id
     const insertProjectQuery = `
     INSERT INTO "projects" ("title", "project_description", "type_id", "user_id")
     VALUES ($1, $2, $3, $4)
     RETURNING "id";`
-
     // FIRST QUERY MAKES Project
-    pool.query(insertProjectQuery, [req.body.title, req.body.project_description, req.body.type_id, req.body.user_id])
-        .then(result => {
-            console.log('New Project Id:', result.rows[0].id); //ID IS HERE!
+    const projectresult = await pool.query(insertProjectQuery, [req.body.title, req.body.project_description, req.body.type_id, req.body.user_id])
+    console.log('New Project Id:', projectresult.rows[0].id); //ID IS HERE!
 
-            const createdProjectId = result.rows[0].id
+    const createdProjectId = projectresult.rows[0].id
 
-            // Now handle the tags reference
-            const insertProjectTagQuery = `
-        INSERT INTO "project_tags" ("project_id", "tag_id")
-        VALUES  ($1, $2);
-        `
-            // SECOND QUERY ADDS TYPE FOR THAT NEW PROJECT
-            pool.query(insertProjectTagQuery, [createdProjectId, req.body.tag_id]).then(result => {
-                //Now that both are done, send back success!
-                const insertProjectImageQuery = `
+    // Now handle the tags reference
+    const insertProjectTagQuery = `INSERT INTO "project_tags" ("project_id", "tag_id")
+        VALUES  ($1, $2);`
+    // SECOND QUERY ADDS TYPE FOR THAT NEW PROJECT
+    if (req.body.tag_id != '') {
+        await pool.query(insertProjectTagQuery, [createdProjectId, req.body.tag_id]);
+    };
+    const insertProjectImageQuery = `
         INSERT INTO "images" ("project_id", "image_name", "image_description", "fav_image")
-        VALUES  ($1, $2, $3, true);
-        `
-                // THIRD QUERY ADDS IMAGE FOR NEW PROJECT
-                pool.query(insertProjectImageQuery, [createdProjectId, req.body.image_name, req.body.image_description]).then(result => {
-                    //Now that both are done, send back success!
-                    res.sendStatus(201);
-                }).catch(err => {
-                    // catch for third query
-                    console.log(err);
-                    res.sendStatus(500)
-                })
-            }).catch(err => {
-                // catch for second query
-                console.log(err);
-                res.sendStatus(500)
-            });
-            // Catch for first query
-        }).catch(err => {
-            console.log(err);
-            res.sendStatus(500)
-        })
-})
+        VALUES  ($1, $2, $3, true);`
+    // THIRD QUERY ADDS IMAGE FOR NEW PROJECT
+    const imagerows = await pool.query(insertProjectImageQuery, [createdProjectId, req.body.image_name, req.body.image_description]);
+    res.send(201);
+
+});
+
 
 //POST FOR ADDING MORE IMAGES
 router.post('/postimage', (req, res) => {
@@ -87,8 +89,7 @@ router.post('/postimage', (req, res) => {
 
     const insertProjectImageQuery = `
   INSERT INTO "images" ("project_id", "image_name", "image_description")
-  VALUES  ($1, $2, $3);
-  `
+  VALUES  ($1, $2, $3);`
     // IMAGE QUERY ADDS IMAGE FOR NEW PROJECT
     pool.query(insertProjectImageQuery, [req.body.project_id, req.body.image_name, req.body.image_description]).then(result => {
         //Now that both are done, send back success!
@@ -100,6 +101,22 @@ router.post('/postimage', (req, res) => {
     });
 });
 
+//POST FOR TAGS
+router.post('/posttag', (req, res) => {
+    console.log(req.body);
+    const insertTagQuery = `
+  INSERT INTO "tags" ("user_id", "tag_name")
+  VALUES  ($1, $2);`
+    // IMAGE QUERY ADDS TAGS
+    pool.query(insertTagQuery, [req.body.user_id, req.body.tag_name]).then(result => {
+        //Now that both are done, send back success!
+        res.sendStatus(201);
+    }).catch(err => {
+        // catch for TAG query
+        console.log(err);
+        res.sendStatus(500)
+    });
+});
 //DELETE PROJECT
 router.delete('/project/:id', (req, res) => {
     //grab the project id
