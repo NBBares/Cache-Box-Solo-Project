@@ -19,6 +19,8 @@ import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
+import GalleryPage from '../Gallery/Gallery';
+import ProjectPage from '../Project/Project';
 
 import './App.css';
 
@@ -94,6 +96,20 @@ function App() {
               // Otherwise, show the registration page
               <RegisterPage />
             }
+          </Route>
+
+          <Route
+            exact
+            path="/gallery"
+          >
+            <GalleryPage/>
+          </Route>
+
+          <Route
+            exact
+            path="/description/:projectId"
+          >
+            <ProjectPage/>
           </Route>
 
           <Route

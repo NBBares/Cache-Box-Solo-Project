@@ -61,12 +61,12 @@ function* editProject(action) {
     try {
 
         // passes all projects from the server to the payload 
-        yield axios.put(`/api/user/editProject/${action.payload}`);//????
+        yield axios.put(`/api/user/editProject/${action.payload}`, action.payload);//????
 
         // automatically log projects
         yield put({
             type: 'FETCH_PROJECT',
-            payload: response.data//????
+            payload: payload
         });
 
     } catch (error) {

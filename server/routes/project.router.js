@@ -6,14 +6,14 @@ const router = express.Router();
  * GET PROJECT
  */
 router.get('/project', (req, res) => {
-    const query = ` SELECT "projects"."id", "projects"."title", "projects"."project_description", "projects"."entry_date", "projects"."edit_date", "projects"."type_id", "projects"."user_id", "types"."type_name", "user"."id", jsonb_agg("tags") as "tags" ,jsonb_agg("images") as "images" FROM "projects" 
-  JOIN "types" ON "types"."id" = "projects"."type_id"
-  JOIN "images" ON "projects"."id" = "images"."project_id"
-  JOIN "user" ON "user"."id" = "projects"."user_id"
-  JOIN "project_tags" ON "project_tags"."project_id" = "projects"."id"
-  JOIN "tags" ON "project_tags"."tag_id" = "tags"."id"
-  WHERE "projects"."user_id" = $1
-  GROUP BY "projects"."id", "types"."id", "user"."id", "project_tags"."project_id";`
+    const query = ` SELECT "projects"."id" as "project_id", "projects"."title", "projects"."project_description", "projects"."entry_date", "projects"."edit_date", "projects"."type_id", "projects"."user_id", "types"."type_name", "user"."id", jsonb_agg(DISTINCT "tags") as "tags" ,jsonb_agg(DISTINCT "images") as "images" FROM "projects" 
+    JOIN "types" ON "types"."id" = "projects"."type_id"
+    JOIN "images" ON "projects"."id" = "images"."project_id"
+    JOIN "user" ON "user"."id" = "projects"."user_id"
+    JOIN "project_tags" ON "project_tags"."project_id" = "projects"."id"
+    JOIN "tags" ON "project_tags"."tag_id" = "tags"."id"
+    WHERE "user"."id" = $1
+    GROUP BY "projects"."id", "types"."id", "user"."id", "project_tags"."project_id";`
 
     console.log('req.user:', req.user.id);
     if (req.isAuthenticated()) {
@@ -61,7 +61,7 @@ router.post('/post', async (req, res) => {
     VALUES ($1, $2, $3, $4)
     RETURNING "id";`
     // FIRST QUERY MAKES Project
-    const projectresult = await pool.query(insertProjectQuery, [req.body.title, req.body.project_description, req.body.type_id, req.body.user_id])
+    const projectresult = await pool.query(insertProjectQuery, [req.body.title, req.body.project_description, req.body.type_id, req.user.id])
     console.log('New Project Id:', projectresult.rows[0].id); //ID IS HERE!
 
     const createdProjectId = projectresult.rows[0].id
@@ -200,10 +200,6 @@ router.put('/editProject/:id', (req, res) => {
     pool.query(queryProject, queryProjectValues)
         .then(() => {
             res.sendStatus(200);
-        })
-        .catch((err) => {
-            console.log('Error completing SELECT Image query', err);
-            res.sendStatus(500);
         })
         .catch((err) => {
             console.log('Error completing SELECT Project query', err);
