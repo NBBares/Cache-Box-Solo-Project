@@ -59,14 +59,13 @@ function* deleteProject(action) {
 //saga to EDIT/PUT a project
 function* editProject(action) {
     try {
-
+        console.log("ACTIONPAYLOAD IS", action.payload)
         // passes all projects from the server to the payload 
-        yield axios.put(`/api/user/editProject/${action.payload}`, action.payload);//????
+        yield axios.put(`/api/user/editProject/${action.payload.id}`, action.payload);//????
 
         // automatically log projects
         yield put({
             type: 'FETCH_PROJECT',
-            payload: payload
         });
 
     } catch (error) {

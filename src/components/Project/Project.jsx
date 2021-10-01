@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import EditForms from '../EditForms/EditForms';
 
 function ProjectPage() {
     let params = useParams();
@@ -31,11 +32,12 @@ function ProjectPage() {
         history.push('/gallery');
     }
 
-    function deleteProject(item) {
+    function deleteProject() {
         dispatch({
             type: 'DELETE_PROJECT',
-            payload: item.id
-        })
+            payload: projectId
+        });
+        history.push('/gallery');
     };
 
     function deleteImage(item) {
@@ -55,7 +57,8 @@ function ProjectPage() {
             type: 'ADD_TO_IMAGES',
             payload:
                 inputImage
-        })
+        });
+        setInputImage('');
     }
     useEffect(() => {
         console.log('in useEffect');
@@ -68,15 +71,15 @@ function ProjectPage() {
             <div className="project">
                 <h2>{project?.title}</h2>
                 <p>Images:
-                    <ul>{(project.images.map((images, i) => {
-                        return <li key={i} data={images.id}><img className="descimg" src={images.image_name} />{images.image_description}
+                    <ul>{(project?.images.map((images, i) => {
+                        return <li key={i} data={images?.id}><img className="descimg" src={images?.image_name} />{images?.image_description}
                             <button onClick={() => deleteImage(images)}>Delete</button>
                         </li>
                     }))}</ul>
                 </p>
                 <p>Tags:
-                    <ul>{(project.tags.map((tags, i) => {
-                        return <li key={i} data={tags.id}>{tags.tag_name}</li>
+                    <ul>{(project?.tags.map((tags, i) => {
+                        return <li key={i} data={tags?.id}>{tags?.tag_name}</li>
                     }))}</ul>
                 </p>
                 <form onSubmit={onSubmit}>
@@ -84,8 +87,9 @@ function ProjectPage() {
                     <input onChange={(event) => setInputImage({ ...inputImage, image_description: event.target.value })} type="text" placeholder="Add a description!" value={inputImage.name_description}></input>
                     <button type="submit" value="Submit">Cache Image</button>
                 </form>
-                <button onClick={() => deleteProject(project)}>Delete</button>
+                <button onClick={() => deleteProject()}>Delete</button>
                 <button onClick={pageChange}>Return</button>
+                <EditForms/>
             </div>
         </>
     )

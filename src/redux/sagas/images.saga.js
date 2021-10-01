@@ -43,12 +43,11 @@ function* editimage(action) {
     try {
 
         // passes all images from the server to the payload 
-        yield axios.put(`/api/user/editImage/${action.payload}`); //????
+        yield axios.put(`/api/user/editImage/${action.payload.id}`, action.payload); //????
 
         // automatically log images
         yield put({
             type: 'FETCH_PROJECT',
-            payload: response.data //????
         });
 
     } catch (error) {

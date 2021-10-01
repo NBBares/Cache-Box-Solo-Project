@@ -185,7 +185,7 @@ router.put('/editImage/:id', (req, res) => {
 //PUT
 router.put('/editProject/:id', (req, res) => {
     const updatedProject = req.body;
-
+    console.log("looking for params", req.params)
     console.log("REQ.BODY FOR EDIT,", req.body);
 
     const queryProject = `UPDATE "projects"
@@ -199,12 +199,14 @@ router.put('/editProject/:id', (req, res) => {
         req.params.id
     ];
 
+    console.log("PROJECTVALUES", queryProjectValues)
+
     pool.query(queryProject, queryProjectValues)
         .then(() => {
             res.sendStatus(200);
         })
         .catch((err) => {
-            console.log('Error completing SELECT Project query', err);
+            console.log('Error completing EDIT Project query', err);
             res.sendStatus(500);
         });
 });
