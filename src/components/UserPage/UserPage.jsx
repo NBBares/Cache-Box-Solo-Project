@@ -6,7 +6,8 @@ import { useHistory } from 'react-router-dom';
 function UserPage() {
     const dispatch= useDispatch();
     //inputs for the form that create a single object for the database to accept
-    const [inputProject, setInputProject] = useState({title:'', project_description:'', type_id:0, user_id:0, image_name:'', image_description:'' });
+    const [inputProject, setInputProject] = useState({title:'', project_description:'', type_id:1, image_name:'', image_description:'' });
+    const [inputTag, setInputTag] = useState({tag_name:''});
     const history = useHistory();
 
     //form logic
@@ -17,21 +18,26 @@ function UserPage() {
         
         //calls the add Project saga and sends the information through the index
         dispatch({
-            type: 'ADD_PROJECTS',
+            type: 'ADD_TO_PROJECTS',
             payload: 
             inputProject
 
         })
-         
+        
+        dispatch({
+          type:"ADD_TO_TAGS",
+          payload: inputTag
+        })
+        
         setInputProject('');
 
         //to send to home page
-        history.push('/');
+        history.push('/gallery');
     }
 
     //to send to home page
     const pageChange = () => {
-        history.push('/')
+        history.push('/gallery')
     }
     
     return(
@@ -39,7 +45,6 @@ function UserPage() {
         <h2>Feel free to add your own Projects!</h2>
         <form onSubmit={onSubmit}>
             <input onChange={(event)=> setInputProject({...inputProject, title: event.target.value})} type="text" placeholder="Enter a Project Title!" value={inputProject.title}></input>
-            <input onChange={(event)=> setInputProject({...inputProject, poster: event.target.value})} type="text" placeholder="Enter the Project's Poster!" value={inputProject.poster}></input>
             <input onChange={(event)=> setInputProject({...inputProject, project_description: event.target.value})} type="text" placeholder="Add a description!" value={inputProject.description}></input>
             <input onChange={(event)=> setInputProject({...inputProject, image_name: event.target.value})} type="text" placeholder="Add an image url!" value={inputProject.image_name}></input>
             <input onChange={(event)=> setInputProject({...inputProject, image_description: event.target.value})} type="text" placeholder="Add a description!" value={inputProject.name_description}></input>
@@ -52,6 +57,7 @@ function UserPage() {
                                 <option value={"6"}>Wood Working</option>
                                 <option value={"7"}>Gardening</option>
             </select>
+            <input onChange={(event)=> setInputTag({...inputTag, tag_name: event.target.value})} type="text" placeholder="Enter a Project Tag!" value={inputTag.tag_name}></input>
             <button type="submit" value="Submit">Cache Project</button>
         </form>
         <button onClick={(pageChange)}>Cancel</button>

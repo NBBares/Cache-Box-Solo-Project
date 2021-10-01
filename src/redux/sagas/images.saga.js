@@ -23,8 +23,8 @@ function* addimage(action) {
 
 // saga to DELETE a image
 function* deleteimage(action) {
+    console.log("IN MY DELETE SAGA MY PAYLOAD IS:", action.payload)
     try {
-
         // passes all images from the server to the payload 
         yield axios.delete(`/api/user/image/${action.payload}`);
 

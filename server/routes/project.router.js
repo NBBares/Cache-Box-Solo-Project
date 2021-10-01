@@ -84,38 +84,28 @@ router.post('/post', async (req, res) => {
 
 
 //POST FOR ADDING MORE IMAGES
-router.post('/postimage', (req, res) => {
+router.post('/postimage', async (req, res) => {
     console.log(req.body);
 
     const insertProjectImageQuery = `
-  INSERT INTO "images" ("project_id", "image_name", "image_description")
-  VALUES  ($1, $2, $3);`
+  INSERT INTO "images" ("image_name", "image_description", "project_id", "fav_image")
+  VALUES  ($1, $2, $3, false);`
     // IMAGE QUERY ADDS IMAGE FOR NEW PROJECT
-    pool.query(insertProjectImageQuery, [req.body.project_id, req.body.image_name, req.body.image_description]).then(result => {
-        //Now that both are done, send back success!
-        res.sendStatus(201);
-    }).catch(err => {
-        // catch for IMAGE query
-        console.log(err);
-        res.sendStatus(500)
-    });
+    await pool.query(insertProjectImageQuery, [req.body.image_name, req.body.image_description, req.body.project_id,]);
+    
 });
 
 //POST FOR TAGS
-router.post('/posttag', (req, res) => {
+router.post('/posttag', async (req, res) => {
     console.log(req.body);
     const insertTagQuery = `
   INSERT INTO "tags" ("user_id", "tag_name")
-  VALUES  ($1, $2);`
+  VALUES  ($1, $2)
+  RETURNING "id";`
     // IMAGE QUERY ADDS TAGS
-    pool.query(insertTagQuery, [req.body.user_id, req.body.tag_name]).then(result => {
+    let tagResult = await pool.query(insertTagQuery, [req.user.id, req.body.tag_name]);
         //Now that both are done, send back success!
-        res.sendStatus(201);
-    }).catch(err => {
-        // catch for TAG query
-        console.log(err);
-        res.sendStatus(500)
-    });
+        console.log("TAGID:", tagResult.rows[0].id);
 });
 //DELETE PROJECT
 router.delete('/project/:id', (req, res) => {
@@ -133,8 +123,8 @@ router.delete('/project/:id', (req, res) => {
         });
 });
 
-//DELETE PROJECT
-router.delete('/images/:id', (req, res) => {
+//DELETE IMAGE
+router.delete('/image/:id', (req, res) => {
     //grab the project id
     const queryText = 'DELETE FROM "images" WHERE id=$1';
     pool.query(queryText, [req.params.id])
