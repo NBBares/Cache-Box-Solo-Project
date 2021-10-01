@@ -66,20 +66,32 @@ router.post('/post', async (req, res) => {
 
     const createdProjectId = projectresult.rows[0].id
 
-    // Now handle the tags reference
-    const insertProjectTagQuery = `INSERT INTO "project_tags" ("project_id", "tag_id")
-        VALUES  ($1, $2);`
-    // SECOND QUERY ADDS TYPE FOR THAT NEW PROJECT
-    if (req.body.tag_id != '') {
-        await pool.query(insertProjectTagQuery, [createdProjectId, req.body.tag_id]);
-    };
     const insertProjectImageQuery = `
-        INSERT INTO "images" ("project_id", "image_name", "image_description", "fav_image")
-        VALUES  ($1, $2, $3, true);`
+    INSERT INTO "images" ("project_id", "image_name", "image_description", "fav_image")
+    VALUES  ($1, $2, $3, true);`
     // THIRD QUERY ADDS IMAGE FOR NEW PROJECT
     const imagerows = await pool.query(insertProjectImageQuery, [createdProjectId, req.body.image_name, req.body.image_description]);
-    res.send(201);
+    
+    //handle tag post
+    const insertTagQuery = `
+    INSERT INTO "tags" ("user_id", "tag_name")
+    VALUES  ($1, $2)
+    RETURNING "id";`
+    // IMAGE QUERY ADDS TAGS 
+    let tagResult = await pool.query(insertTagQuery, [req.user.id, req.body.tag_name]);
+    const createdTagId = tagResult.rows[0].id
+    //Now that both are done, send back success!
+    console.log("NEW TAG ID:", tagResult.rows[0].id);
+   
+    // Now handle the tags reference
+    const insertProjectTagQuery = `INSERT INTO "project_tags" ("project_id", "tag_id")
+    VALUES  ($1, $2);`
+    
+    // QUERY ADDS TABLE RELATIONSHIP FOR THAT NEW PROJECT/TAG
+    await pool.query(insertProjectTagQuery, [createdProjectId, createdTagId]);
+    
 
+    res.send(201);
 });
 
 
@@ -91,22 +103,22 @@ router.post('/postimage', async (req, res) => {
   INSERT INTO "images" ("image_name", "image_description", "project_id", "fav_image")
   VALUES  ($1, $2, $3, false);`
     // IMAGE QUERY ADDS IMAGE FOR NEW PROJECT
-    await pool.query(insertProjectImageQuery, [req.body.image_name, req.body.image_description, req.body.project_id,]);
-    
+    await pool.query(insertProjectImageQuery, [req.body.image_name, req.body.image_description, req.body.project_id, ]);
+
 });
 
 //POST FOR TAGS
-router.post('/posttag', async (req, res) => {
-    console.log(req.body);
-    const insertTagQuery = `
-  INSERT INTO "tags" ("user_id", "tag_name")
-  VALUES  ($1, $2)
-  RETURNING "id";`
-    // IMAGE QUERY ADDS TAGS
-    let tagResult = await pool.query(insertTagQuery, [req.user.id, req.body.tag_name]);
-        //Now that both are done, send back success!
-        console.log("TAGID:", tagResult.rows[0].id);
-});
+// router.post('/posttag', async (req, res) => {
+//     console.log(req.body);
+//     const insertTagQuery = `
+//   INSERT INTO "tags" ("user_id", "tag_name")
+//   VALUES  ($1, $2)
+//   RETURNING "id";`
+//     // IMAGE QUERY ADDS TAGS
+//     let tagResult = await pool.query(insertTagQuery, [req.user.id, req.body.tag_name]);
+//         //Now that both are done, send back success!
+//         console.log("TAGID:", tagResult.rows[0].id);
+//});
 //DELETE PROJECT
 router.delete('/project/:id', (req, res) => {
     //grab the project id

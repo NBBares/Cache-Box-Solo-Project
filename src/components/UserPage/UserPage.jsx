@@ -6,8 +6,8 @@ import { useHistory } from 'react-router-dom';
 function UserPage() {
     const dispatch= useDispatch();
     //inputs for the form that create a single object for the database to accept
-    const [inputProject, setInputProject] = useState({title:'', project_description:'', type_id:1, image_name:'', image_description:'' });
-    const [inputTag, setInputTag] = useState({tag_name:''});
+    const [inputProject, setInputProject] = useState({title:'', project_description:'', type_id:1, image_name:'', image_description:'', tag_name:'' });
+    // const [inputTag, setInputTag] = useState({tag_name:''});
     const history = useHistory();
 
     //form logic
@@ -24,10 +24,10 @@ function UserPage() {
 
         })
         
-        dispatch({
-          type:"ADD_TO_TAGS",
-          payload: inputTag
-        })
+        // dispatch({
+        //   type:"ADD_TO_TAGS",
+        //   payload: inputTag
+        // })
         
         setInputProject('');
 
@@ -57,7 +57,7 @@ function UserPage() {
                                 <option value={"6"}>Wood Working</option>
                                 <option value={"7"}>Gardening</option>
             </select>
-            <input onChange={(event)=> setInputTag({...inputTag, tag_name: event.target.value})} type="text" placeholder="Enter a Project Tag!" value={inputTag.tag_name}></input>
+            <input onChange={(event)=> setInputProject({...inputProject, tag_name: event.target.value})} type="text" placeholder="Enter a Project Tag!" value={inputProject.tag_name}></input>
             <button type="submit" value="Submit">Cache Project</button>
         </form>
         <button onClick={(pageChange)}>Cancel</button>
