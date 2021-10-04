@@ -25,10 +25,10 @@ function GalleryPage() {
             <div>
                 <ul>
                     {projectData.map((projectItem, i) => {
-                        return <li key={i} data={projectItem.id}>Title:{projectItem.title},
-                            Image:<img onClick={() => history.push(`/description/${projectItem.project_id}`)} src={projectItem.images[0].image_name} />,
-                            Type: {projectItem.type_name}, Tags: <ul>{(projectItem.tags.map((tags, i) => {
-                                return <li key={i} data={tags.id}>{tags.tag_name}</li>
+                        return <li onClick={() => history.push(`/description/${projectItem?.project_id}`)} key={i} data={projectItem?.id}>Title:{projectItem?.title},
+                            Image:<img src={projectItem?.images[0]?.image_name} />,
+                            Type: {projectItem?.type_name}, Tags: <ul>{(projectItem.tags.map((tags, i) => {
+                                return <li key={i} data={tags?.id}>{tags?.tag_name}</li>
                             }))}</ul>
                         </li>;
                     })}

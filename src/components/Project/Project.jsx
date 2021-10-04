@@ -11,7 +11,7 @@ function ProjectPage() {
     let { projectId } = params;
     const dispatch = useDispatch();
     //grabs the information from the store
-    const [inputImage, setInputImage] = useState({ image_name: '', image_description: '', project_id: projectId});
+    const [inputImage, setInputImage] = useState({ image_name: '', image_description: '', project_id: projectId });
     let allprojects = useSelector(store => store.projectReducer);
     console.log('THIS IS ALL PROJECTS:', allprojects)
     const history = useHistory();
@@ -23,9 +23,6 @@ function ProjectPage() {
     });
     console.log('Found this project:', project);
 
-    if (!project) {
-        return <h2>Invalid Project ID</h2>
-    }
 
     //calls in history to change pages
     const pageChange = () => {
@@ -58,18 +55,25 @@ function ProjectPage() {
             payload:
                 inputImage
         });
-        setInputImage('');
-    }
+        setInputImage({image_name: '', image_description: '', project_id: projectId });
+        dispatch({
+            type: 'FETCH_PROJECT',
+        });
+    };
     useEffect(() => {
         console.log('in useEffect');
         const action = { type: 'FETCH_PROJECT' };
         dispatch(action);
     }, []);
+    if (!project) {
+        return <h2>Invalid Project ID</h2>
+    }
 
     return (
         <>
             <div className="project">
                 <h2>{project?.title}</h2>
+                <h3>{project?.project_description}</h3>
                 <p>Images:
                     <ul>{(project?.images.map((images, i) => {
                         return <li key={i} data={images?.id}><img className="descimg" src={images?.image_name} />{images?.image_description}
@@ -89,7 +93,7 @@ function ProjectPage() {
                 </form>
                 <button onClick={() => deleteProject()}>Delete</button>
                 <button onClick={pageChange}>Return</button>
-                <EditForms/>
+                <EditForms />
             </div>
         </>
     )

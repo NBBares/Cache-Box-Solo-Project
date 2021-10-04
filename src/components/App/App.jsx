@@ -21,8 +21,9 @@ import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import GalleryPage from '../Gallery/Gallery';
 import ProjectPage from '../Project/Project';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-import './App.css';
+//import './App.css';
 
 function App() {
   const dispatch = useDispatch();
