@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
+import Cloud from '../Cloud/Cloud';
 
 function UserPage() {
   const dispatch = useDispatch();
@@ -53,7 +53,10 @@ function UserPage() {
         <Form onSubmit={onSubmit}>
           <input onChange={(event)=> setInputProject({...inputProject, title: event.target.value})} type="text" placeholder="Enter a Project Title!" value={inputProject.title}></input>
             <input onChange={(event)=> setInputProject({...inputProject, project_description: event.target.value})} type="text" placeholder="Add a description!" value={inputProject.description}></input>
-            <input onChange={(event)=> setInputProject({...inputProject, image_name: event.target.value})} type="text" placeholder="Add an image url!" value={inputProject.image_name}></input>
+            
+            <Cloud/>
+            
+            {/* <input onChange={(event)=> setInputProject({...inputProject, image_name: event.target.value})} type="text" placeholder="Add an image url!" value={inputProject.image_name}></input> */}
             <input onChange={(event)=> setInputProject({...inputProject, image_description: event.target.value})} type="text" placeholder="Add a description!" value={inputProject.name_description}></input>
             <select onChange={(event) => setInputProject({...inputProject, type_id: event.target.value})} value={inputProject.type_id}>
                                 <option value={"1"}>Physical Art</option>

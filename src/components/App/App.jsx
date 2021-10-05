@@ -23,6 +23,7 @@ import GalleryPage from '../Gallery/Gallery';
 import ProjectPage from '../Project/Project';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+
 //import './App.css';
 
 function App() {
