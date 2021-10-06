@@ -3,26 +3,43 @@ import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import EditForms from '../EditForms/EditForms';
+import { useScript } from "../../hooks/useScript";
+import { Button } from 'react-bootstrap';
 
 function ProjectPage() {
-    let params = useParams();
+    const params = useParams();
+    const history = useHistory();
+    const dispatch = useDispatch();
     console.log(params);
 
-    let { projectId } = params;
-    const dispatch = useDispatch();
+    const { projectId } = params;
     //grabs the information from the store
     const [inputImage, setInputImage] = useState({ image_name: '', image_description: '', project_id: projectId });
-    let allprojects = useSelector(store => store.projectReducer);
+    const [editState, setEditState] = useState(false);
+    const allprojects = useSelector(store => store.projectReducer);
     console.log('THIS IS ALL PROJECTS:', allprojects)
-    const history = useHistory();
 
-
-    let project = allprojects.find(project => {
+    const project = allprojects.find(project => {
         console.log("trying to find a project", project, projectId)
         return project.project_id === Number(projectId);
     });
     console.log('Found this project:', project);
 
+    const openWidget = () => {
+        !!window.cloudinary && window.cloudinary.createUploadWidget(
+            {
+                sources: ['local', 'url', 'camera'],
+                cloudName: process.env.REACT_APP_CLOUDINARY_NAME,
+                uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
+            },
+            (error, result) => {
+                if (!error && result && result.event === "success") {
+                    // When an upload is successful, save the uploaded URL to local state!
+                    setInputImage({ ...inputImage, image_name: result.info.secure_url })
+                }
+            },
+        ).open();
+    }
 
     //calls in history to change pages
     const pageChange = () => {
@@ -55,19 +72,30 @@ function ProjectPage() {
             payload:
                 inputImage
         });
-        setInputImage({image_name: '', image_description: '', project_id: projectId });
+        setInputImage({ image_name: '', image_description: '', project_id: projectId });
         dispatch({
             type: 'FETCH_PROJECT',
         });
     };
+    
     useEffect(() => {
         console.log('in useEffect');
         const action = { type: 'FETCH_PROJECT' };
         dispatch(action);
     }, []);
+
+    // This sets up a fancy useEffect that mounts a script tag for the cloudinary library
+    useScript('https://widget.cloudinary.com/v2.0/global/all.js')
+
     if (!project) {
         return <h2>Invalid Project ID</h2>
     }
+
+    let editProject = (()=> {
+        console.log("EDIT STATE:", editState)
+        setEditState(!editState);
+        console.log("EDIT STATE:", editState)
+    });
 
     return (
         <>
@@ -77,7 +105,7 @@ function ProjectPage() {
                 <p>Images:
                     <ul>{(project?.images.map((images, i) => {
                         return <li key={i} data={images?.id}><img className="descimg" src={images?.image_name} />{images?.image_description}
-                            <button onClick={() => deleteImage(images)}>Delete</button>
+                            <Button type="button" variant="secondary" size="sm" onClick={() => deleteImage(images)}>Delete</Button>
                         </li>
                     }))}</ul>
                 </p>
@@ -87,13 +115,19 @@ function ProjectPage() {
                     }))}</ul>
                 </p>
                 <form onSubmit={onSubmit}>
-                    <input onChange={(event) => setInputImage({ ...inputImage, image_name: event.target.value })} type="text" placeholder="Add an image url!" value={inputImage.image_name}></input>
+                    <h4>Upload New File</h4>
+                    File to upload: <Button type="button" variant="secondary" onClick={openWidget}>Pick File</Button>
+                    <br />
+                    {inputImage.image_name && <p>Uploaded Image URL: {inputImage.image_name} <br /><img src={inputImage.image_name} width={100} /></p>}
+                    <br />
                     <input onChange={(event) => setInputImage({ ...inputImage, image_description: event.target.value })} type="text" placeholder="Add a description!" value={inputImage.name_description}></input>
-                    <button type="submit" value="Submit">Cache Image</button>
+                    <Button variant="outline-primary" type="submit" value="Submit">Cache Image</Button>
                 </form>
-                <button onClick={() => deleteProject()}>Delete</button>
-                <button onClick={pageChange}>Return</button>
-                <EditForms />
+                
+                <Button onClick={pageChange}>Return</Button>
+                <Button variant="secondary" size="sm" onClick={editProject}>Edit</Button>
+                {editState && <EditForms/>}
+                {editState && <Button size="sm" onClick={() => deleteProject()}>Delete</Button>}
             </div>
         </>
     )

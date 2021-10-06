@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
 
 function EditForms() {
 
@@ -47,7 +47,7 @@ function EditForms() {
             <form onSubmit={onSubmitProject}>
                 <input onChange={(event) => setInputProjectEdit({ ...inputProjectEdit, id: projectId, title: event.target.value })} type="text" placeholder="Edit your title!" value={inputProjectEdit.title}></input>
                 <input onChange={(event) => setInputProjectEdit({ ...inputProjectEdit, project_description: event.target.value })} type="text" placeholder="Edit the description!" value={inputProjectEdit.project_description}></input>
-                <button type="submit" value="Submit">Submit Changes</button>
+                <Button variant="outline-primary" type="submit" value="Submit">Submit Changes</Button>
             </form>
             </div>
         </>
