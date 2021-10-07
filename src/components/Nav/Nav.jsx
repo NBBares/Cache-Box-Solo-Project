@@ -1,23 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import LogOutButton from '../LogOutButton/LogOutButton';
 //import './Nav.css';
-import { useSelector } from 'react-redux';
 import { Button, Navbar, Nav, Form, FormControl } from 'react-bootstrap';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 function Navigation() {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const user = useSelector((store) => store.user);
-  let projectData = useSelector(store => store.projectReducer);
+  let searchTerm = useSelector(store => store.galleryReducer);//grabs search term
 
   const onSubmit = (event) => {
-    console.log("Project inputs are,", inputProject);
     //prevent form from submitting early
     event.preventDefault();
 
-    //calls the add Project saga and sends the information through the index
-    dispatch({
-      type: 'FETCH_PROJECT'
-    });
+    
 
     //to send to gallery results page
     history.push('/gallery');
@@ -30,7 +29,7 @@ function Navigation() {
       <Navbar.Collapse id="navbarScroll">
         <Nav
           className="mr-auto my-2 my-lg-0"
-          style={{ maxHeight: '100px' }}
+          style={{ maxHeight: '150px' }}
           navbarScroll
         >
           {user.id === null && <Nav.Link href="/#/login">Login / Register</Nav.Link>}
@@ -39,14 +38,18 @@ function Navigation() {
         <Nav.Link href="/#/info">Info Page</Nav.Link>
         <Nav.Link href="/#/gallery" >Gallery</Nav.Link></>}
       </Nav>
-      {user.id && <Form className="d-flex">
+      {user.id && <Form onSubmit={onSubmit} className="d-flex">
           <FormControl
             type="search"
             placeholder="Search"
             className="mr-2"
             aria-label="Search"
+            onChange={(event) => dispatch({
+              type: 'SET_GALLERY',
+              payload: event.target.value
+            })} type="title" placeholder="Title" value={searchTerm}
           />
-          <Button variant="outline-success">Search</Button>
+          <Button variant="outline-secondary" type="submit" value="Submit">Search</Button>
         </Form>}
         {user.id && <LogOutButton className="navLink" />}
       </Navbar.Collapse>

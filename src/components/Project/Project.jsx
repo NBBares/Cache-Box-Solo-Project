@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import EditForms from '../EditForms/EditForms';
 import { useScript } from "../../hooks/useScript";
 import { Button } from 'react-bootstrap';
+import Carousel from 'react-bootstrap/Carousel';
+import Image from 'react-bootstrap/Image';
 
 function ProjectPage() {
     const params = useParams();
@@ -16,6 +18,7 @@ function ProjectPage() {
     //grabs the information from the store
     const [inputImage, setInputImage] = useState({ image_name: '', image_description: '', project_id: projectId });
     const [editState, setEditState] = useState(false);
+    const [addState, setAddState] = useState(false);
     const allprojects = useSelector(store => store.projectReducer);
     console.log('THIS IS ALL PROJECTS:', allprojects)
 
@@ -76,8 +79,9 @@ function ProjectPage() {
         dispatch({
             type: 'FETCH_PROJECT',
         });
+        setAddState(!addState);
     };
-    
+
     useEffect(() => {
         console.log('in useEffect');
         const action = { type: 'FETCH_PROJECT' };
@@ -91,10 +95,16 @@ function ProjectPage() {
         return <h2>Invalid Project ID</h2>
     }
 
-    let editProject = (()=> {
+    let editProject = (() => {
         console.log("EDIT STATE:", editState)
         setEditState(!editState);
         console.log("EDIT STATE:", editState)
+    });
+
+    let addStuff = (() => {
+        console.log("ADD STATE:", addState)
+        setAddState(!addState);
+        console.log("ADD STATE:", addState)
     });
 
     return (
@@ -103,34 +113,56 @@ function ProjectPage() {
                 <h2>{project?.title}</h2>
                 <h3>{project?.project_description}</h3>
                 <p>Images:
-                    <ul>{(project?.images.map((images, i) => {
-                        return <li key={i} data={images?.id}><img className="descimg" src={images?.image_name} />{images?.image_description}
-                            <Button type="button" variant="secondary" size="sm" onClick={() => deleteImage(images)}>Delete</Button>
-                        </li>
-                    }))}</ul>
+                    <Carousel style={{ width: '40rem', height: '30rem' }}>{(project?.images.map((images, i) => {
+                        return (
+                            <Carousel.Item interval='500000'>
+                                <Image
+                                    className="d-block w-100"
+                                    // src="holder.js/800x400?text=First slide&bg=373940"
+                                    src="holder.js/100px250" fluid
+                                    alt="First slide"
+                                    src={images?.image_name}
+                                />
+                                <Carousel.Caption>
+                                    <p>{images?.image_description}</p>
+                                <Button class="btn btn-primary pull-right" type="button" variant="secondary" size="sm" onClick={() => deleteImage(images)}>Delete</Button>
+                                </Carousel.Caption>
+                            </Carousel.Item>)
+                    }))}
+                    </Carousel>
                 </p>
                 <p>Tags:
                     <ul>{(project?.tags.map((tags, i) => {
                         return <li key={i} data={tags?.id}>{tags?.tag_name}</li>
                     }))}</ul>
                 </p>
-                <form onSubmit={onSubmit}>
+                <Button variant="secondary" size="sm" onClick={addStuff}>Add</Button>
+                {addState && <form onSubmit={onSubmit}>
                     <h4>Upload New File</h4>
-                    File to upload: <Button type="button" variant="secondary" onClick={openWidget}>Pick File</Button>
+                    File to upload: 
+                    <Button type="button" variant="secondary" onClick={openWidget}>Pick File</Button>
                     <br />
                     {inputImage.image_name && <p>Uploaded Image URL: {inputImage.image_name} <br /><img src={inputImage.image_name} width={100} /></p>}
                     <br />
                     <input onChange={(event) => setInputImage({ ...inputImage, image_description: event.target.value })} type="text" placeholder="Add a description!" value={inputImage.name_description}></input>
                     <Button variant="outline-primary" type="submit" value="Submit">Cache Image</Button>
-                </form>
-                
-                <Button onClick={pageChange}>Return</Button>
+                </form>}
+
                 <Button variant="secondary" size="sm" onClick={editProject}>Edit</Button>
-                {editState && <EditForms/>}
+                {editState && <EditForms />}
                 {editState && <Button size="sm" onClick={() => deleteProject()}>Delete</Button>}
+                <br/>
+                <Button onClick={pageChange}>Return</Button>
             </div>
         </>
     )
 }
 
 export default ProjectPage;
+
+
+{/* <ul>{(project?.images.map((images, i) => {
+                        return <li key={i} data={images?.id}><img className="descimg" src={images?.image_name} />{images?.image_description}
+                            <Button type="button" variant="secondary" size="sm" onClick={() => deleteImage(images)}>Delete</Button>
+                        </li>
+                    }))}</ul> */}
