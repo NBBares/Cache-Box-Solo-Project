@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import LogOutButton from '../LogOutButton/LogOutButton';
-//import './Nav.css';
-import { Button, Navbar, Nav, Form, FormControl } from 'react-bootstrap';
+import { Button, Navbar, Nav, Form, FormControl, Image } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import '../Nav/Nav.css';
 
 function Navigation() {
   const dispatch = useDispatch();
@@ -23,11 +23,13 @@ function Navigation() {
   }
 
   return (
-    <Navbar bg="light" expand="lg">
+    <div className="navHead">
+    <Navbar class= "navHeader" expand="lg">
+      <Image style={{maxHeight: '50px', maxWidth: '50px' }} src="../Images/Chest-icon.png" />
       <Navbar.Brand href="/home" to="home">Cache Box</Navbar.Brand>
       <Navbar.Toggle aria-controls="navbarScroll" />
       <Navbar.Collapse id="navbarScroll">
-        <Nav
+        <Nav 
           className="mr-auto my-2 my-lg-0"
           style={{ maxHeight: '150px' }}
           navbarScroll
@@ -47,13 +49,14 @@ function Navigation() {
             onChange={(event) => dispatch({
               type: 'SET_GALLERY',
               payload: event.target.value
-            })} type="title" placeholder="Title" value={searchTerm}
+            })} type="title" placeholder="Search" value={searchTerm}
           />
           <Button variant="outline-secondary" type="submit" value="Submit">Search</Button>
         </Form>}
         {user.id && <LogOutButton className="navLink" />}
       </Navbar.Collapse>
     </Navbar>
+    </div>
   );
 }
 

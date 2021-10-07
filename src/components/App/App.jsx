@@ -24,7 +24,7 @@ import ProjectPage from '../Project/Project';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-//import './App.css';
+import './App.css';
 
 function App() {
   const dispatch = useDispatch();

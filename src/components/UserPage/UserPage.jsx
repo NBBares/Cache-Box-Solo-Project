@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import "../UserPage/UserPage.css";
 
 import { useScript } from "../../hooks/useScript";
 
@@ -65,52 +66,53 @@ function UserPage() {
 
   return (
     <>
-      <div>
+    <Row  xs={1} md={1} className="g-4"></Row>
+      <div className="formPrimary">
         {useScript('https://widget.cloudinary.com/v2.0/global/all.js')}
-        <Form onSubmit={onSubmit}>
+        <Form className="projectForm" onSubmit={onSubmit}>
           <Form.Group as={Row} className="mb-3" controlId="formHorizontalTitle">
             <Form.Label column sm={2}>
-              Title
+              Title:
             </Form.Label>
             <Col sm={10}>
-              <Form.Control onChange={(event) => setInputProject({ ...inputProject, title: event.target.value })} type="title" placeholder="Title" value={inputProject.title} />
+              <Form.Control className="input" onChange={(event) => setInputProject({ ...inputProject, title: event.target.value })} type="title" placeholder="Title" value={inputProject.title} />
             </Col>
           </Form.Group>
 
           <Form.Group as={Row} className="mb-3" controlId="formHorizontalProjectDescription">
             <Form.Label column sm={2}>
-              Project Description
+              Project Description:
             </Form.Label>
             <Col sm={10}>
-              <Form.Control onChange={(event) => setInputProject({ ...inputProject, project_description: event.target.value })} type="text" placeholder="Description" value={inputProject.description} />
+              <Form.Control className="input" onChange={(event) => setInputProject({ ...inputProject, project_description: event.target.value })} type="text" placeholder="Description" value={inputProject.description} />
             </Col>
           </Form.Group>
 
           <Form.Group as={Row} className="mb-3" controlId="formHorizontalImageSubmit">
             <Form.Label as="legend" column sm={2}>
-              Upload Image
+              Upload Image:
             </Form.Label>
             <Col sm={10}>
-              <Button type="button" variant="secondary" size="sm" onClick={openWidget}>Pick File</Button>
+              <Button type="button" variant="outline-secondary" size="sm" onClick={openWidget}>Pick File</Button>
               {inputProject.image_name && <p>Uploaded Image URL: {inputProject.image_name} <br /><img src={inputProject.image_name} width={100} /></p>}
             </Col>
           </Form.Group>
 
           <Form.Group as={Row} className="mb-3" controlId="formHorizontalImageDescription">
             <Form.Label column sm={2}>
-              Image Description
+              Image Description:
             </Form.Label>
             <Col sm={10}>
-              <Form.Control onChange={(event) => setInputProject({ ...inputProject, image_description: event.target.value })} type="text" placeholder="Description" value={inputProject.name_description} />
+              <Form.Control className="input" onChange={(event) => setInputProject({ ...inputProject, image_description: event.target.value })} type="text" placeholder="Description" value={inputProject.name_description} />
             </Col>
           </Form.Group>
 
           <Form.Group as={Row} className="mb-3" controlId="formHorizontalType">
             <Form.Label column sm={2}>
-              Project Type
+              Project Type:
             </Form.Label>
             <Col sm={10}>
-            <Form.Select type="text" placeholder="Type" onChange={(event) => setInputProject({ ...inputProject, type_id: event.target.value })} value={inputProject.type_id}>
+            <Form.Select className="input" type="text" placeholder="Type" onChange={(event) => setInputProject({ ...inputProject, type_id: event.target.value })} value={inputProject.type_id}>
                 <option value={"1"}>Physical Art</option>
                 <option value={"2"}>Digital Art</option>
                 <option value={"3"}>To Do</option>
@@ -124,10 +126,10 @@ function UserPage() {
 
           <Form.Group as={Row} className="mb-3" controlId="formHorizontalTag">
             <Form.Label column sm={2}>
-              Tag
+              Tag:
             </Form.Label>
             <Col sm={10}>
-              <Form.Control onChange={(event) => setInputProject({ ...inputProject, tag_name: event.target.value })} type="text" placeholder="Tag" value={inputProject.tag_name} />
+              <Form.Control className="input" onChange={(event) => setInputProject({ ...inputProject, tag_name: event.target.value })} type="text" placeholder="Tag" value={inputProject.tag_name} />
             </Col>
           </Form.Group>
 

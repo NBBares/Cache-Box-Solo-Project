@@ -7,6 +7,8 @@ import { useScript } from "../../hooks/useScript";
 import { Button } from 'react-bootstrap';
 import Carousel from 'react-bootstrap/Carousel';
 import Image from 'react-bootstrap/Image';
+import '../Project/Project.css';
+import Row from 'react-bootstrap/Row';
 
 function ProjectPage() {
     const params = useParams();
@@ -109,11 +111,13 @@ function ProjectPage() {
 
     return (
         <>
+        <div className="container">
+            <Row xs={1} md={1} className="g-4"></Row>
             <div className="project">
-                <h2>{project?.title}</h2>
-                <h3>{project?.project_description}</h3>
-                <p>Images:
-                    <Carousel style={{ width: '40rem', height: '30rem' }}>{(project?.images.map((images, i) => {
+                <h1 className="title">{project?.title}</h1>
+                <h4 className="projectDes">{project?.project_description}</h4>
+                <div class="carouselDiv">
+                    <Carousel class="carousel" >{(project?.images.map((images, i) => {
                         return (
                             <Carousel.Item interval='500000'>
                                 <Image
@@ -130,7 +134,7 @@ function ProjectPage() {
                             </Carousel.Item>)
                     }))}
                     </Carousel>
-                </p>
+                </div>
                 <p>Tags:
                     <ul>{(project?.tags.map((tags, i) => {
                         return <li key={i} data={tags?.id}>{tags?.tag_name}</li>
@@ -154,6 +158,7 @@ function ProjectPage() {
                 <br/>
                 <Button onClick={pageChange}>Return</Button>
             </div>
+          </div>  
         </>
     )
 }

@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
+import '../Gallery/Gallery.css';
 
 function GalleryPage() {
     const dispatch = useDispatch();
@@ -36,7 +36,7 @@ function GalleryPage() {
             <Row xs={1} md={3} className="g-4">
   {Array.from({ length: 4 }),projectData.map((projectItem, i) => (
     <Col>
-      <Card style={{ maxWidth: '25rem', maxHeight: '30rem' }} onClick={() => history.push(`/description/${projectItem?.project_id}`)} key={i} data={projectItem?.id}>
+      <Card className="cards" style={{ maxWidth: '25rem', maxHeight: '30rem' }} onClick={() => history.push(`/description/${projectItem?.project_id}`)} key={i} data={projectItem?.id}>
         <Card.Img style={{ height: '25rem' }} variant="top" src={projectItem?.images[0]?.image_name} />
         <Card.Body >
           <Card.Title >{projectItem?.title}</Card.Title>
