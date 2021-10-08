@@ -33,17 +33,18 @@ function GalleryPage() {
     return (
         <>
             <div className="container">
+            <h2 className="header2">The Box</h2>
             <Row xs={1} md={3} className="g-4">
   {Array.from({ length: 4 }),projectData.map((projectItem, i) => (
     <Col>
       <Card className="cards" style={{ maxWidth: '25rem', maxHeight: '30rem' }} onClick={() => history.push(`/description/${projectItem?.project_id}`)} key={i} data={projectItem?.id}>
-        <Card.Img style={{ height: '25rem' }} variant="top" src={projectItem?.images[0]?.image_name} />
+        <Card.Img className="cardImage" style={{ height: '25rem' }} variant="top" src={projectItem?.images[0]?.image_name} />
         <Card.Body >
           <Card.Title >{projectItem?.title}</Card.Title>
           <Card.Text>Type:{projectItem?.type_name}</Card.Text>
-          <Card.Text>Tags:<ul>{(projectItem.tags.map((tags, i) => {
-                                return <li key={i} data={tags?.id}>{tags?.tag_name}</li>
-                            }))}</ul></Card.Text>
+          <Card.Text><p>Tag:{(projectItem.tags.map((tags, i) => {
+                                return <p key={i} data={tags?.id}>{tags?.tag_name}</p>
+                            }))}</p></Card.Text>
         </Card.Body>
       </Card>
     </Col>

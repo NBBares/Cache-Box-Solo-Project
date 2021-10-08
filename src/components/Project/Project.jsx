@@ -7,8 +7,8 @@ import { useScript } from "../../hooks/useScript";
 import { Button } from 'react-bootstrap';
 import Carousel from 'react-bootstrap/Carousel';
 import Image from 'react-bootstrap/Image';
-import '../Project/Project.css';
 import Row from 'react-bootstrap/Row';
+import '../Project/Project.css';
 
 function ProjectPage() {
     const params = useParams();
@@ -114,8 +114,17 @@ function ProjectPage() {
         <div className="container">
             <Row xs={1} md={1} className="g-4"></Row>
             <div className="project">
-                <h1 className="title">{project?.title}</h1>
-                <h4 className="projectDes">{project?.project_description}</h4>
+                <div className="header">
+                    <h1 className="title">{project?.title}</h1>
+                    <h4 className="projectDes">{project?.project_description}</h4>
+                                <h3>
+                                    Project Type: {project?.type_name}
+                                    <br/>
+                                    {(project?.tags.map((tags, i) => {
+                                        return <p key={i} data={tags?.id}>Tag: {tags?.tag_name}</p>
+                                    }))}
+                                </h3>
+                </div>
                 <div class="carouselDiv">
                     <Carousel class="carousel" >{(project?.images.map((images, i) => {
                         return (
@@ -127,19 +136,14 @@ function ProjectPage() {
                                     alt="First slide"
                                     src={images?.image_name}
                                 />
-                                <Carousel.Caption>
+                                <Carousel.Caption style={{backgroundColor:"black", marginLeft:"25%", marginRight:"25%"}}>
                                     <p>{images?.image_description}</p>
-                                <Button class="btn btn-primary pull-right" type="button" variant="secondary" size="sm" onClick={() => deleteImage(images)}>Delete</Button>
+                                <Button class="btn btn-primary pull-right" type="button" variant="outline-light" size="sm" onClick={() => deleteImage(images)}>Delete</Button>
                                 </Carousel.Caption>
                             </Carousel.Item>)
                     }))}
                     </Carousel>
                 </div>
-                <p>Tags:
-                    <ul>{(project?.tags.map((tags, i) => {
-                        return <li key={i} data={tags?.id}>{tags?.tag_name}</li>
-                    }))}</ul>
-                </p>
                 <Button variant="secondary" size="sm" onClick={addStuff}>Add</Button>
                 {addState && <form onSubmit={onSubmit}>
                     <h4>Upload New File</h4>
@@ -152,11 +156,11 @@ function ProjectPage() {
                     <Button variant="outline-primary" type="submit" value="Submit">Cache Image</Button>
                 </form>}
 
-                <Button variant="secondary" size="sm" onClick={editProject}>Edit</Button>
+                <Button className="second" variant="secondary" size="sm" onClick={editProject}>Edit</Button>
                 {editState && <EditForms />}
                 {editState && <Button size="sm" onClick={() => deleteProject()}>Delete</Button>}
                 <br/>
-                <Button onClick={pageChange}>Return</Button>
+                <Button className="first" onClick={pageChange}>Return</Button>
             </div>
           </div>  
         </>
@@ -166,8 +170,3 @@ function ProjectPage() {
 export default ProjectPage;
 
 
-{/* <ul>{(project?.images.map((images, i) => {
-                        return <li key={i} data={images?.id}><img className="descimg" src={images?.image_name} />{images?.image_description}
-                            <Button type="button" variant="secondary" size="sm" onClick={() => deleteImage(images)}>Delete</Button>
-                        </li>
-                    }))}</ul> */}

@@ -5,8 +5,27 @@
 .title{
     padding-top: 50px;
     text-align: center;
+    font-size:60px;
+    text-decoration: underline;
 }
 
 .projectDes{
     text-align: center;
+    
 }
+
+.container{
+    font-family: 'Courier New', Courier, monospace;
+    
+}
+
+.header{
+    text-align: center;
+    font-size:60px;
+    background-color: rgb(78, 78, 78);
+    color: white;
+    border: 3px ridge rgb(255, 255, 255);    border-radius: 15px;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+

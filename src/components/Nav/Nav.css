@@ -1,11 +1,46 @@
-.navHead{
+a.navHead{
 background-color: transparent;
 color: white;
 border: 1px solid rgb(181, 220, 255);
 border-radius: 12px;
 padding: 5px;
+font-family: 'Courier New', Courier, monospace;
 }
 
 .navHeader{
   color:white;
+}
+.navbar-light .navbar-nav a.nav-link{
+  color:white;
+  font-family: 'Courier New', Courier, monospace;
+  padding:15px;
+}
+
+.navbar-light a.navbar-brand {
+  color:white;
+  font-family: 'Courier New', Courier, monospace;
+  font-size:60px;
+  padding-left: 10px;
+}
+
+.mr-2{
+  padding:15px
+}
+
+.d-flex{
+  padding:15px;
+  font-family: 'Courier New', Courier, monospace;
+
+}
+
+.btn{
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.searchB{
+  padding-left:5px;
+}
+
+a.nav-link{
+  font-size: 20px;
 }

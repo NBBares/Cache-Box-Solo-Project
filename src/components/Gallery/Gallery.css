@@ -1,3 +1,29 @@
 .container{
     padding-top: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    
+}
+
+.cards.card{
+    background-color: rgb(78, 78, 78);
+    border: 3px ridge rgb(255, 255, 255);
+    color: white;
+
+}
+
+.header2{
+    background-color:rgb(78, 78, 78);
+    padding: 25px;
+    border: 3px ridge rgb(255, 255, 255);
+    border-radius: 12px;  
+    font-family: 'Courier New', Courier, monospace;
+    color:white;
+    margin-bottom: 5%;
+    text-align: center;
+   
+
+}
+
+.cardImage{
+    border-bottom: 3px ridge rgb(255, 255, 255);
 }

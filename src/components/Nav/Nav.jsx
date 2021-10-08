@@ -51,7 +51,7 @@ function Navigation() {
               payload: event.target.value
             })} type="title" placeholder="Search" value={searchTerm}
           />
-          <Button variant="outline-secondary" type="submit" value="Submit">Search</Button>
+          <Button className="searchB" variant="outline-light" type="submit" value="Submit">Search</Button>
         </Form>}
         {user.id && <LogOutButton className="navLink" />}
       </Navbar.Collapse>

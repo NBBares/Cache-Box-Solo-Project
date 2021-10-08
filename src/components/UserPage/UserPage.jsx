@@ -67,6 +67,7 @@ function UserPage() {
   return (
     <>
     <Row  xs={1} md={1} className="g-4"></Row>
+      <h2 className="header1">Create a new project:</h2>
       <div className="formPrimary">
         {useScript('https://widget.cloudinary.com/v2.0/global/all.js')}
         <Form className="projectForm" onSubmit={onSubmit}>
@@ -75,7 +76,7 @@ function UserPage() {
               Title:
             </Form.Label>
             <Col sm={10}>
-              <Form.Control className="input" onChange={(event) => setInputProject({ ...inputProject, title: event.target.value })} type="title" placeholder="Title" value={inputProject.title} />
+              <Form.Control required className="input" onChange={(event) => setInputProject({ ...inputProject, title: event.target.value })} type="title" placeholder="Title" value={inputProject.title} />
             </Col>
           </Form.Group>
 
@@ -84,7 +85,7 @@ function UserPage() {
               Project Description:
             </Form.Label>
             <Col sm={10}>
-              <Form.Control className="input" onChange={(event) => setInputProject({ ...inputProject, project_description: event.target.value })} type="text" placeholder="Description" value={inputProject.description} />
+              <Form.Control required className="input" onChange={(event) => setInputProject({ ...inputProject, project_description: event.target.value })} type="text" placeholder="Description" value={inputProject.description} />
             </Col>
           </Form.Group>
 
@@ -93,7 +94,7 @@ function UserPage() {
               Upload Image:
             </Form.Label>
             <Col sm={10}>
-              <Button type="button" variant="outline-secondary" size="sm" onClick={openWidget}>Pick File</Button>
+              <Button type="button" variant="outline-light" size="sm" onClick={openWidget}>Pick File</Button>
               {inputProject.image_name && <p>Uploaded Image URL: {inputProject.image_name} <br /><img src={inputProject.image_name} width={100} /></p>}
             </Col>
           </Form.Group>
@@ -112,7 +113,7 @@ function UserPage() {
               Project Type:
             </Form.Label>
             <Col sm={10}>
-            <Form.Select className="input" type="text" placeholder="Type" onChange={(event) => setInputProject({ ...inputProject, type_id: event.target.value })} value={inputProject.type_id}>
+            <Form.Select required className="input" type="text" placeholder="Type" onChange={(event) => setInputProject({ ...inputProject, type_id: event.target.value })} value={inputProject.type_id}>
                 <option value={"1"}>Physical Art</option>
                 <option value={"2"}>Digital Art</option>
                 <option value={"3"}>To Do</option>
@@ -129,13 +130,13 @@ function UserPage() {
               Tag:
             </Form.Label>
             <Col sm={10}>
-              <Form.Control className="input" onChange={(event) => setInputProject({ ...inputProject, tag_name: event.target.value })} type="text" placeholder="Tag" value={inputProject.tag_name} />
+              <Form.Control required className="input" onChange={(event) => setInputProject({ ...inputProject, tag_name: event.target.value })} type="text" placeholder="Tag" value={inputProject.tag_name} />
             </Col>
           </Form.Group>
 
           <Form.Group as={Row} className="mb-3">
             <Col sm={{ span: 10, offset: 2 }}>
-              <Button variant="outline-primary" type="submit" value="Submit">Cache Project</Button>
+              <Button className="first" variant="outline-light" type="submit" value="Submit">Cache Project</Button>
             </Col>
           </Form.Group>
         </Form>
