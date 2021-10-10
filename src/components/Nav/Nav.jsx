@@ -37,7 +37,7 @@ function Navigation() {
           {user.id === null && <Nav.Link href="/#/login">Login / Register</Nav.Link>}
           {user.id && <><Nav.Link href="/#/user">Home</Nav.Link>
         <Nav.Link href="/#/about">About</Nav.Link>
-        <Nav.Link href="/#/info">Info Page</Nav.Link>
+        {/* <Nav.Link href="/#/info">Info Page</Nav.Link> */}
         <Nav.Link href="/#/gallery" >Gallery</Nav.Link></>}
       </Nav>
       {user.id && <Form onSubmit={onSubmit} className="d-flex">

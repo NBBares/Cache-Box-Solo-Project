@@ -1,5 +1,5 @@
 .carouselDiv{
-    padding: 40px;
+    margin: 40px;
 }
 
 .title{
@@ -29,3 +29,13 @@
     margin-right: 20%;
 }
 
+.edit{
+    margin: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.d-block{
+    color: white;
+    border: 3px ridge rgb(255, 255, 255);    border-radius: 15px;
+}

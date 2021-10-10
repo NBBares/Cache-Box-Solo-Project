@@ -130,37 +130,37 @@ function ProjectPage() {
                         return (
                             <Carousel.Item interval='500000'>
                                 <Image
-                                    className="d-block w-100"
+                                    className="d-block"
                                     // src="holder.js/800x400?text=First slide&bg=373940"
                                     src="holder.js/100px250" fluid
                                     alt="First slide"
                                     src={images?.image_name}
                                 />
-                                <Carousel.Caption style={{backgroundColor:"black", marginLeft:"25%", marginRight:"25%"}}>
-                                    <p>{images?.image_description}</p>
-                                <Button class="btn btn-primary pull-right" type="button" variant="outline-light" size="sm" onClick={() => deleteImage(images)}>Delete</Button>
+                                <Carousel.Caption style={{marginLeft:"25%", marginRight:"25%"}}>
+                                    <p style={{backgroundColor:"black"}}>{images?.image_description}</p>
+                                <Button class="btn btn-primary pull-right" style={{backgroundColor:"black"}} type="button" variant="outline-light" size="sm" onClick={() => deleteImage(images)}>Delete</Button>
                                 </Carousel.Caption>
                             </Carousel.Item>)
                     }))}
                     </Carousel>
                 </div>
-                <Button variant="secondary" size="sm" onClick={addStuff}>Add</Button>
+                <Button className="edit" variant="outline-light" size="sm" onClick={addStuff}>Add</Button>
                 {addState && <form onSubmit={onSubmit}>
                     <h4>Upload New File</h4>
                     File to upload: 
-                    <Button type="button" variant="secondary" onClick={openWidget}>Pick File</Button>
+                    <Button className="add" type="button" variant="outline-light" size="sm" onClick={openWidget}>Pick File</Button>
                     <br />
                     {inputImage.image_name && <p>Uploaded Image URL: {inputImage.image_name} <br /><img src={inputImage.image_name} width={100} /></p>}
                     <br />
                     <input onChange={(event) => setInputImage({ ...inputImage, image_description: event.target.value })} type="text" placeholder="Add a description!" value={inputImage.name_description}></input>
-                    <Button variant="outline-primary" type="submit" value="Submit">Cache Image</Button>
+                    <Button variant="outline-light" size="sm" type="submit" value="Submit">Cache Image</Button>
                 </form>}
 
-                <Button className="second" variant="secondary" size="sm" onClick={editProject}>Edit</Button>
+                <Button className="edit" variant="outline-light" size="sm" onClick={editProject}>Edit</Button>
                 {editState && <EditForms />}
-                {editState && <Button size="sm" onClick={() => deleteProject()}>Delete</Button>}
+                {editState && <Button className="edit" variant="outline-light" size="sm" onClick={() => deleteProject()}>Delete</Button>}
                 <br/>
-                <Button className="first" onClick={pageChange}>Return</Button>
+                <Button className="return" variant="outline-light" onClick={pageChange}>Return</Button>
             </div>
           </div>  
         </>

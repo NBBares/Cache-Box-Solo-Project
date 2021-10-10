@@ -33,7 +33,11 @@ function GalleryPage() {
     return (
         <>
             <div className="container">
-            <h2 className="header2">The Box</h2>
+            <h2 className="header2">The Box
+            <br/>
+            <p className="headerP">Find your projects here</p>
+            </h2>
+            
             <Row xs={1} md={3} className="g-4">
   {Array.from({ length: 4 }),projectData.map((projectItem, i) => (
     <Col>
