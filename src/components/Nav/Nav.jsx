@@ -24,7 +24,7 @@ function Navigation() {
 
   return (
     <div className="navHead">
-    <Navbar class= "navHeader" expand="lg">
+    <Navbar className= "navHeader" expand="lg">
       <Image style={{maxHeight: '50px', maxWidth: '50px' }} src="../Images/Chest-icon.png" />
       <Navbar.Brand href="/home" to="home">Cache Box</Navbar.Brand>
       <Navbar.Toggle aria-controls="navbarScroll" />
